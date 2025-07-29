@@ -1,51 +1,36 @@
 # 🏦 Credit Approval System
 
-A scalable Django-based backend system for managing customers and loan applications, with support for asynchronous data loading using Celery and Redis. The system includes endpoints for customer registration, eligibility checks, loan creation, and more.
+A Django-based backend system to automate customer credit approvals and loan management. It loads customer and loan data from Excel files and provides REST APIs for registration, loan eligibility check, loan creation, and loan viewing. Built with PostgreSQL, Celery, Redis, and Docker.
 
 ---
 
-## 🚀 Features
+## 🔧 Tech Stack
 
-- Customer registration and loan management
-- Loan eligibility checker based on creditworthiness
-- Celery-powered async task to preload customer and loan data from `.xlsx` files
-- PostgreSQL for database
-- Redis as Celery broker
-- Dockerized for simple setup and deployment
-
----
-
-## 🧾 Project Structure
-
-credit_approval_system/
-│
-├── backend/ # Django project
-│ ├── core/ # Core app: models, views, tasks
-│ ├── backend/ # Django settings
-│ └── manage.py
-│
-├── docker/ # Docker and compose files
-│ ├── docker-compose.yml
-│ └── Dockerfile
-│
-├── customer_data.xlsx # Input file for initial customer data
-├── loan_data.xlsx # Input file for initial loan data
-└── README.md
-
+- **Backend**: Django 5, Django REST Framework
+- **Database**: PostgreSQL
+- **Task Queue**: Celery with Redis
+- **Containerization**: Docker & Docker Compose
+- **Excel Parsing**: openpyxl
 
 ---
 
-## ⚙️ Setup Instructions
+## 🚀 Getting Started
 
-### 🔧 Prerequisites
+### 🔁 Prerequisites
 
-- Docker & Docker Compose installed
-- Git
+Make sure you have the following installed:
+
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
 
 ---
 
-### 📦 Clone the repository
+### 🧩 Setup Instructions
 
-```bash
-git clone https://github.com/utkarsh0830/Credit-Approval-System.git
-cd Credit-Approval-System
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/yourusername/credit-approval-system.git
+   cd credit-approval-system
+
+### Run
+docker-compose up --build
