@@ -1,0 +1,64 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: credit_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+  web:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile
+    command: >
+      sh -c "python manage.py wait_for_db &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ../backend:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  celery:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile
+    command: >
+      sh -c "python manage.py wait_for_db &&
+             celery -A backend worker --loglevel=info"
+    volumes:
+      - ../backend:/code
+    depends_on:
+      - db
+      - redis
+      - web
+
+  loader:
+    build:
+      context: ../backend
+      dockerfile: ../docker/Dockerfile
+    command: >
+      sh -c "python manage.py wait_for_db &&
+             python manage.py shell -c 'from core.tasks import load_initial_data; load_initial_data()'"
+    volumes:
+      - ../backend:/code
+    depends_on:
+      - db
+      - web
+
+volumes:
+  pgdata:
