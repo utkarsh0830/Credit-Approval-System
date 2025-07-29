@@ -1,0 +1,26 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Virtual environments
+venv/
+env/
+
+# Django files
+*.log
+*.pot
+*.pyc
+db.sqlite3
+
+# Environment variables
+.env
+
+# VSCode
+.vscode/
+
+# System
+.DS_Store
+
+# Excel files
+*.xlsx
