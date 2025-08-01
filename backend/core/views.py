@@ -9,17 +9,30 @@ from datetime import date, timedelta
 class RegisterCustomerView(APIView):
     def post(self, request):
         data = request.data
-        monthly_income = data.get("monthly_income")
+
+        # Validate required fields
+        required_fields = ["first_name", "last_name", "phone_number", "age", "monthly_income"]
+        for field in required_fields:
+            if not data.get(field):
+                return Response({"error": f"{field} is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            monthly_income = int(data.get("monthly_income"))
+            age = int(data.get("age"))
+        except (TypeError, ValueError):
+            return Response({"error": "monthly_income and age must be valid integers."}, status=status.HTTP_400_BAD_REQUEST)
+
         approved_limit = round((36 * monthly_income) / 100000) * 100000
 
         customer = Customer.objects.create(
             first_name=data.get("first_name"),
             last_name=data.get("last_name"),
             phone_number=data.get("phone_number"),
-            age=data.get("age"),
+            age=age,
             monthly_salary=monthly_income,
             approved_limit=approved_limit
         )
+
         return Response({
             "customer_id": customer.customer_id,
             "name": f"{customer.first_name} {customer.last_name}",
